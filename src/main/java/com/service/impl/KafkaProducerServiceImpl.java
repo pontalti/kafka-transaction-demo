@@ -18,7 +18,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService{
 	
 	private static Logger LOG = LoggerFactory.getLogger(KafkaProducerServiceImpl.class);
 
-	private KafkaTemplate<String, Object> template;
+	private final KafkaTemplate<String, Object> template;
 
 	public KafkaProducerServiceImpl(KafkaTemplate<String, Object> template) {
 		super();

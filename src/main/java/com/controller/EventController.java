@@ -14,7 +14,7 @@ import com.service.KafkaProducerService;
 @RestController
 public class EventController {
 
-	private KafkaProducerService producer;
+	private final KafkaProducerService producer;
 
 	public EventController(KafkaProducerService producer) {
 		super();
