@@ -22,7 +22,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 	
 	@Override
 	@RetryableTopic(attempts = "4")
-	@KafkaListener(id="transactions", topics = "my-topic", groupId = "my-group")
+	@KafkaListener(id="transactions", topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
 	public void listen(CustomerDTO customer, ConsumerRecord<String, String> record) {
 		log.info("received message=[{}], key=[{}] from topic=[{}], partition=[{}], offset=[{}], TS=[{}]", 
 				customer, record.key(), record.topic(), record.partition(), record.offset(), record.timestamp());

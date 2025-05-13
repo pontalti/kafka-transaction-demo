@@ -1,24 +1,36 @@
 package com;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+
+import com.dto.CustomerDTO;
+import com.service.KafkaConsumerService;
+import com.service.KafkaProducerService;
 
 @SpringBootTest
-@EmbeddedKafka(partitions = 1, topics = { "my-topic-retry-1", "my-topic-retry-2", "my-topic-dlt" })
 @ActiveProfiles("test")
+@DirtiesContext
+@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 public class KafkaTransactionDemoApplicationTests {
 
-    @DynamicPropertySource
-    static void kafkaProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.kafka.bootstrap-servers", () -> System.getProperty("spring.embedded.kafka.brokers"));
-    }
+    @Autowired
+    private KafkaProducerService producer;
+
+    @Autowired
+    private KafkaConsumerService consumer;
+
+    @Value("${spring.kafka.topic.name}")
+    private String topic;
 
     @Test
-    void test() {
-
+    public void givenEmbeddedKafkaBroker_whenSendingWithSimpleProducer_thenMessageReceived() {
+        CustomerDTO customer = CustomerDTO.builder().id(1).name("Gustavo").build();
+        producer.sendEventsToTopic(customer);
     }
+
 }

@@ -1,9 +1,10 @@
-
 server:
   port: 8080
 
 spring:
   kafka:
+    topic:
+      name: my-topic
     producer:
       bootstrap-servers: kafka_node:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
